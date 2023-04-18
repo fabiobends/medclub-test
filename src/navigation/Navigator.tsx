@@ -10,11 +10,16 @@ const Stack = createNativeStackNavigator();
 const Navigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{orientation: 'portrait'}}>
         <Stack.Screen
           name={routes.home}
           component={HomeScreen}
-          options={{title: 'Consultas'}}
+          options={{
+            title: 'Consultas',
+            headerStyle: {
+              backgroundColor: 'black',
+            },
+          }}
         />
         <Stack.Screen
           name={routes.createAppointment}

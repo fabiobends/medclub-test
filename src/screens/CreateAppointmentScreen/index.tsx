@@ -1,7 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useCallback, useMemo, useState} from 'react';
 import useAppNavigation from '../../hooks/useAppNavigation';
-import {Picker} from '@react-native-picker/picker';
 import {
   dates,
   hospitals,
@@ -11,19 +10,15 @@ import {
 } from '../../mocks/data';
 import themes from '../../styles/themes';
 import useAppContext from '../../hooks/useAppContext';
-
-const getPickerItems = (items: Array<string>) =>
-  items.map(item => <Picker.Item key={item} label={item} value={item} />);
+import Picker, {PickerValue} from '../../components/Picker';
 
 const specialties = Array.from(specialtyAndPhysicians.keys());
-const specialtyItems = (() =>
-  specialties.map(item => (
-    <Picker.Item key={item} label={specialtyInPortuguese[item]} value={item} />
-  )))();
 
-const hourItems = getPickerItems(hours);
-const dateItems = getPickerItems(dates);
-const locationItems = getPickerItems(hospitals);
+const getPickerValues = (
+  items: Array<string>,
+  obj?: Record<string, string>,
+): Array<PickerValue> =>
+  items.map(item => ({label: obj ? obj[item] : item, value: item}));
 
 export default function CreateAppointmentScreen() {
   const {pop} = useAppNavigation();
@@ -39,10 +34,6 @@ export default function CreateAppointmentScreen() {
   );
   const [currentPhysician, setCurrentPhysician] = useState(
     availablePhysicians[0],
-  );
-  const physicianItems = useMemo(
-    () => getPickerItems(availablePhysicians),
-    [availablePhysicians],
   );
 
   const createAppointment = useCallback(() => {
@@ -68,30 +59,35 @@ export default function CreateAppointmentScreen() {
   return (
     <View style={styles.container}>
       <Picker
-        selectedValue={currentHour}
-        onValueChange={value => setCurrentHour(value)}>
-        {hourItems}
-      </Picker>
+        currentValue={currentHour}
+        setCurrentValue={setCurrentHour}
+        items={getPickerValues(hours)}
+        title="Hora"
+      />
       <Picker
-        selectedValue={currentDate}
-        onValueChange={value => setCurrentDate(value)}>
-        {dateItems}
-      </Picker>
+        currentValue={currentDate}
+        setCurrentValue={setCurrentDate}
+        items={getPickerValues(dates)}
+        title="Data"
+      />
       <Picker
-        selectedValue={currentSpecialty}
-        onValueChange={value => setCurrentSpecialty(value)}>
-        {specialtyItems}
-      </Picker>
+        currentValue={currentSpecialty}
+        setCurrentValue={setCurrentSpecialty}
+        items={getPickerValues(specialties, specialtyInPortuguese)}
+        title="Especialidade"
+      />
       <Picker
-        selectedValue={currentPhysician}
-        onValueChange={value => setCurrentPhysician(value)}>
-        {physicianItems}
-      </Picker>
+        currentValue={currentPhysician}
+        setCurrentValue={setCurrentPhysician}
+        items={getPickerValues(availablePhysicians)}
+        title="Médico"
+      />
       <Picker
-        selectedValue={currentLocation}
-        onValueChange={value => setCurrentLocation(value)}>
-        {locationItems}
-      </Picker>
+        currentValue={currentLocation}
+        setCurrentValue={setCurrentLocation}
+        items={getPickerValues(hospitals)}
+        title="Localização"
+      />
       <TouchableOpacity onPress={createAppointment} style={styles.button}>
         <Text style={styles.buttonText}>Confirmar</Text>
       </TouchableOpacity>
@@ -101,8 +97,7 @@ export default function CreateAppointmentScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    marginTop: 20,
   },
   button: {
     marginTop: 20,
