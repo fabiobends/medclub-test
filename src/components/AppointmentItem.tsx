@@ -7,7 +7,7 @@ import Dialog from 'react-native-dialog';
 import InfoLabel from './InfoLabel';
 
 type AppointmentItemProps = Appointment & {
-  onDeleteItem: (id: string) => void;
+  onDeleteItem: (id: number) => void;
 };
 
 const AppointmentItem = ({
@@ -82,6 +82,7 @@ const styles = {
     dialogContainer: {
       padding: 20,
       width: 300,
+      borderRadius: 10,
     },
     dialogHeader: {
       marginVertical: 0,

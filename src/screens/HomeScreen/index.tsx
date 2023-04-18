@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -16,13 +16,21 @@ import themes from '../../styles/themes';
 import {Appointment} from '../../types/appointment';
 import PlusIcon from '../../assets/icons/plus.svg';
 
-import {data} from '../../mocks/data';
 import AppointmentItem from '../../components/AppointmentItem';
+import useAppContext from '../../hooks/useAppContext';
 
 export default function HomeScreen(): JSX.Element {
   const {navigate} = useAppNavigation();
+  const {appointments, deleteAppointment} = useAppContext();
   const colorTheme = useColorScheme() ?? 'light';
-  const [appointments, setAppointments] = useState<Array<Appointment>>(data);
+
+  const renderAppointmentItem: ListRenderItem<Appointment> = ({item}) => (
+    <AppointmentItem {...item} onDeleteItem={deleteAppointment} />
+  );
+
+  const navigateToAppointmentScreen = useCallback(() => {
+    navigate(routes.createAppointment);
+  }, [navigate]);
 
   const backgroundStyle = useMemo(
     () => ({
@@ -31,22 +39,6 @@ export default function HomeScreen(): JSX.Element {
     }),
     [colorTheme],
   );
-
-  const renderAppointmentItem: ListRenderItem<Appointment> = ({item}) => (
-    <AppointmentItem {...item} onDeleteItem={deleteAppointment} />
-  );
-
-  const deleteAppointment = useCallback(
-    (id: string) => {
-      const newAppointments = appointments.filter(item => item.id !== id);
-      setAppointments(newAppointments);
-    },
-    [appointments],
-  );
-
-  const navigateToAppointmentScreen = useCallback(() => {
-    navigate(routes.createAppointment);
-  }, [navigate]);
 
   return (
     <SafeAreaView style={backgroundStyle}>
