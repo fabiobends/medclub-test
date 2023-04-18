@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+} from 'react-native';
 import React, {useCallback, useMemo, useState} from 'react';
 import useAppNavigation from '../../hooks/useAppNavigation';
 import {
@@ -21,6 +27,7 @@ const getPickerValues = (
   items.map(item => ({label: obj ? obj[item] : item, value: item}));
 
 export default function CreateAppointmentScreen() {
+  const colorScheme = useColorScheme() ?? 'light';
   const {pop} = useAppNavigation();
   const {addAppointment} = useAppContext();
   const [currentHour, setCurrentHour] = useState(hours[0]);
@@ -38,7 +45,7 @@ export default function CreateAppointmentScreen() {
 
   const createAppointment = useCallback(() => {
     addAppointment({
-      id: Date.now(),
+      id: new Date().toISOString(),
       date: currentDate,
       hour: currentHour,
       specialty: specialtyInPortuguese[currentSpecialty],
@@ -57,7 +64,7 @@ export default function CreateAppointmentScreen() {
   ]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles[colorScheme].container}>
       <Picker
         currentValue={currentHour}
         setCurrentValue={setCurrentHour}
@@ -88,16 +95,20 @@ export default function CreateAppointmentScreen() {
         items={getPickerValues(hospitals)}
         title="Localização"
       />
-      <TouchableOpacity onPress={createAppointment} style={styles.button}>
-        <Text style={styles.buttonText}>Confirmar</Text>
+      <TouchableOpacity
+        onPress={createAppointment}
+        style={styles[colorScheme].button}>
+        <Text style={styles[colorScheme].buttonText}>Confirmar</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: themes.light.background,
   },
   button: {
     marginTop: 20,
@@ -110,5 +121,25 @@ const styles = StyleSheet.create({
   buttonText: {
     color: themes.light.primary,
     fontWeight: '500',
+    fontSize: 18,
   },
 });
+
+const styles = {
+  light: lightStyles,
+  dark: {
+    ...lightStyles,
+    container: {
+      ...lightStyles.container,
+      backgroundColor: themes.dark.background,
+    },
+    button: {
+      ...lightStyles.button,
+      backgroundColor: themes.dark.secondary,
+    },
+    buttonText: {
+      ...lightStyles.buttonText,
+      color: themes.dark.primary,
+    },
+  } as typeof lightStyles,
+};

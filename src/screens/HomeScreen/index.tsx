@@ -1,9 +1,8 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 import {
   FlatList,
   ListRenderItem,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -32,48 +31,47 @@ export default function HomeScreen(): JSX.Element {
     navigate(routes.createAppointment);
   }, [navigate]);
 
-  const backgroundStyle = useMemo(
-    () => ({
-      flex: 1,
-      backgroundColor: themes[colorTheme].background,
-    }),
-    [colorTheme],
-  );
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={themes[colorTheme].barStyle}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+    <SafeAreaView style={styles[colorTheme].container}>
       <FlatList
         data={appointments}
-        contentContainerStyle={styles.flatListContent}
-        style={styles.flatListMarginAside}
+        contentContainerStyle={styles[colorTheme].flatListContent}
+        style={styles[colorTheme].flatListMarginAside}
         renderItem={renderAppointmentItem}
         ItemSeparatorComponent={ItemSeparator}
         ListEmptyComponent={EmptyList}
       />
       <TouchableOpacity
-        style={styles.plusButton}
+        style={styles[colorTheme].plusButton}
         onPress={navigateToAppointmentScreen}>
         <PlusIcon
-          fill="white"
+          fill={themes[colorTheme].background}
           height={25}
           width={25}
           strokeWidth={1.5}
-          stroke="white"
+          stroke={themes[colorTheme].background}
         />
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
-const ItemSeparator = () => <View style={styles.separator} />;
+const ItemSeparator = () => <View style={styles.light.separator} />;
 
-const EmptyList = () => <Text>Você não tem consultas no momento</Text>;
+const EmptyList = () => {
+  const colorScheme = useColorScheme() ?? 'light';
+  return (
+    <Text style={styles[colorScheme].emptyText}>
+      Você não tem consultas no momento.
+    </Text>
+  );
+};
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: themes.light.background,
+  },
   flatListContent: {
     paddingVertical: 30,
     justifyContent: 'center',
@@ -92,6 +90,34 @@ const styles = StyleSheet.create({
     backgroundColor: themes.light.secondary,
   },
   text: {
-    color: '#222',
+    color: themes.light.primary,
+  },
+  emptyText: {
+    color: themes.light.onBackground,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
+
+const styles = {
+  light: lightStyles,
+  dark: {
+    ...lightStyles,
+    container: {
+      ...lightStyles.container,
+      backgroundColor: themes.dark.background,
+    },
+    plusButton: {
+      ...lightStyles.plusButton,
+      backgroundColor: themes.dark.secondary,
+    },
+    text: {
+      color: themes.dark.primary,
+    },
+    emptyText: {
+      ...lightStyles.emptyText,
+      color: themes.dark.onBackground,
+    },
+  } as typeof lightStyles,
+};

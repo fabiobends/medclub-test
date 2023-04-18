@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, useColorScheme} from 'react-native';
+import themes from '../styles/themes';
 
 interface InfoLabelProps {
   label: string;
@@ -7,14 +8,23 @@ interface InfoLabelProps {
   shouldExpand?: boolean;
 }
 
-const InfoLabel = ({label, value, shouldExpand = false}: InfoLabelProps) => (
-  <View style={[infoStyles.container, shouldExpand && infoStyles.expand]}>
-    <Text style={infoStyles.label}>{label} </Text>
-    <Text>{value}</Text>
-  </View>
-);
+const InfoLabel = ({label, value, shouldExpand = false}: InfoLabelProps) => {
+  const colorScheme = useColorScheme() ?? 'light';
+  return (
+    <View
+      style={[
+        styles[colorScheme].container,
+        shouldExpand && styles[colorScheme].expand,
+      ]}>
+      <Text style={[styles[colorScheme].text, styles[colorScheme].label]}>
+        {label}{' '}
+      </Text>
+      <Text style={styles[colorScheme].text}>{value}</Text>
+    </View>
+  );
+};
 
-const infoStyles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginVertical: 5,
@@ -26,6 +36,21 @@ const infoStyles = StyleSheet.create({
   label: {
     fontWeight: 'bold',
   },
+  text: {
+    fontSize: 16,
+    color: themes.light.onPrimary,
+  },
 });
+
+const styles = {
+  light: lightStyles,
+  dark: {
+    ...lightStyles,
+    text: {
+      ...lightStyles.text,
+      color: themes.dark.onPrimary,
+    },
+  } as typeof lightStyles,
+};
 
 export default InfoLabel;

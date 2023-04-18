@@ -6,7 +6,7 @@ import {Appointment} from '../types/appointment';
 interface AppData {
   appointments: Array<Appointment>;
   addAppointment: (item: Appointment) => void;
-  deleteAppointment: (id: number) => void;
+  deleteAppointment: (id: string) => void;
 }
 
 export const AppContext = createContext({} as AppData);
@@ -19,7 +19,7 @@ const AppProvider = ({children}: PropsWithChildren) => {
       return prev.slice();
     });
   }, []);
-  const deleteAppointment = useCallback((id: number) => {
+  const deleteAppointment = useCallback((id: string) => {
     setAppointments(prev => {
       const remainingAppointments = prev.filter(
         appointment => appointment.id !== id,

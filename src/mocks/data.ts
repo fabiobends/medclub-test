@@ -43,7 +43,7 @@ export const hospitals = [
 
 export const data: Array<Appointment> = [
   {
-    id: 1681825914368,
+    id: '2023-04-18T21:45:20.074Z',
     date: '12/04',
     hour: '09:00',
     physician: 'Dra. Paula',
@@ -51,7 +51,7 @@ export const data: Array<Appointment> = [
     location: 'Hospital Santa Marta',
   },
   {
-    id: 1681825926887,
+    id: '2023-04-18T21:46:06.715Z',
     date: '13/04',
     hour: '10:30',
     physician: 'Dr. Bruno',

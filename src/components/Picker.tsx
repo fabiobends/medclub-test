@@ -1,6 +1,6 @@
 import {Picker as RNPicker} from '@react-native-picker/picker';
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, useColorScheme} from 'react-native';
 import themes from '../styles/themes';
 
 export interface PickerValue {
@@ -20,25 +20,29 @@ const getPickerItems = (items: Array<PickerValue>) =>
     <RNPicker.Item key={item.value} label={item.label} value={item.value} />
   ));
 
-const Picker = ({title, items, currentValue, setCurrentValue}: PickerProps) => (
-  <View style={styles.container}>
-    <Text style={styles.pickerText}>{title}</Text>
-    <RNPicker
-      selectedValue={currentValue}
-      onValueChange={setCurrentValue}
-      dropdownIconColor={themes.light.secondary}
-      dropdownIconRippleColor={themes.light.background}>
-      {getPickerItems(items)}
-    </RNPicker>
-    <View style={styles.divider} />
-  </View>
-);
+const Picker = ({title, items, currentValue, setCurrentValue}: PickerProps) => {
+  const colorScheme = useColorScheme() ?? 'light';
+  return (
+    <View style={styles[colorScheme].container}>
+      <Text style={styles[colorScheme].pickerText}>{title}</Text>
+      <RNPicker
+        selectedValue={currentValue}
+        onValueChange={setCurrentValue}
+        dropdownIconColor={themes[colorScheme].secondary}
+        dropdownIconRippleColor={themes[colorScheme].onBackground}>
+        {getPickerItems(items)}
+      </RNPicker>
+      <View style={styles[colorScheme].divider} />
+    </View>
+  );
+};
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   container: {
     marginHorizontal: 15,
     marginVertical: 5,
     paddingTop: 5,
+    borderRadius: 5,
     backgroundColor: themes.light.primary,
   },
   pickerText: {
@@ -53,5 +57,20 @@ const styles = StyleSheet.create({
     backgroundColor: themes.light.secondary,
   },
 });
+
+const styles = {
+  light: lightStyles,
+  dark: {
+    ...lightStyles,
+    container: {
+      ...lightStyles.container,
+      backgroundColor: themes.dark.primary,
+    },
+    divider: {
+      ...lightStyles.divider,
+      backgroundColor: themes.dark.secondary,
+    },
+  } as typeof lightStyles,
+};
 
 export default Picker;

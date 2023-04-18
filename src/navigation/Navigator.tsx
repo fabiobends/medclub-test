@@ -4,21 +4,29 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import routes from '../routes';
 import CreateAppointmentScreen from '../screens/CreateAppointmentScreen';
 import HomeScreen from '../screens/HomeScreen';
+import {useColorScheme} from 'react-native';
+import themes from '../styles/themes';
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
+  const colorScheme = useColorScheme() ?? 'light';
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{orientation: 'portrait'}}>
+      <Stack.Navigator
+        screenOptions={{
+          orientation: 'portrait',
+          headerStyle: {
+            backgroundColor: themes[colorScheme].primary,
+          },
+          headerTintColor: themes[colorScheme].onPrimary,
+          statusBarStyle: colorScheme ? 'light' : 'dark',
+        }}>
         <Stack.Screen
           name={routes.home}
           component={HomeScreen}
           options={{
             title: 'Consultas',
-            headerStyle: {
-              backgroundColor: 'black',
-            },
           }}
         />
         <Stack.Screen

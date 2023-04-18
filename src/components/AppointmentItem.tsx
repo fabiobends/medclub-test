@@ -1,4 +1,4 @@
-import {View, useColorScheme, TouchableOpacity} from 'react-native';
+import {View, useColorScheme, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {Appointment} from '../types/appointment';
 import themes from '../styles/themes';
@@ -7,7 +7,7 @@ import Dialog from 'react-native-dialog';
 import InfoLabel from './InfoLabel';
 
 type AppointmentItemProps = Appointment & {
-  onDeleteItem: (id: number) => void;
+  onDeleteItem: (id: string) => void;
 };
 
 const AppointmentItem = ({
@@ -57,41 +57,50 @@ const AppointmentItem = ({
   );
 };
 
-const styles = {
-  light: {
-    container: {
-      flexDirection: 'row',
-      padding: 20,
-      justifyContent: 'space-between',
-      backgroundColor: themes.light.primary,
-      borderRadius: 10,
-      shadowColor: 'black',
-      shadowOffset: {height: 10},
-      shadowOpacity: 0.1,
-      elevation: 2,
-    },
-    mainColumn: {
-      flex: 1,
-      marginRight: 16,
-      justifyContent: 'space-between',
-    },
-    titleAndDescription: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    dialogContainer: {
-      padding: 20,
-      width: 300,
-      borderRadius: 10,
-    },
-    dialogHeader: {
-      marginVertical: 0,
-    },
-    trashIcon: {
-      marginTop: 5,
-    },
+const lightStyle = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    justifyContent: 'space-between',
+    backgroundColor: themes.light.primary,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOffset: {height: 10, width: 0},
+    shadowOpacity: 0.1,
+    elevation: 2,
   },
-  dark: {},
+  mainColumn: {
+    flex: 1,
+    marginRight: 20,
+    justifyContent: 'space-between',
+  },
+  titleAndDescription: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dialogContainer: {
+    padding: 20,
+    width: 300,
+    borderRadius: 10,
+  },
+  dialogHeader: {
+    marginVertical: 0,
+  },
+  trashIcon: {
+    marginTop: 5,
+  },
+});
+
+const styles = {
+  light: lightStyle,
+  dark: {
+    ...lightStyle,
+    container: {
+      ...lightStyle.container,
+      backgroundColor: themes.dark.primary,
+    },
+  } as typeof lightStyle,
 };
 
 export default AppointmentItem;

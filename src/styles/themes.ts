@@ -1,33 +1,30 @@
-import {ColorValue, StatusBarStyle} from 'react-native/types';
+import {ColorValue} from 'react-native/types';
 
 interface Palette {
   background: ColorValue;
   onBackground: ColorValue;
-  primary: ColorValue;
-  onPrimary: ColorValue;
+  primary: string;
+  onPrimary: string;
   secondary: ColorValue;
   onSecondary: ColorValue;
-  barStyle: StatusBarStyle;
 }
 
 const themes: Record<'light' | 'dark', Palette> = {
   light: {
-    background: '#dfdfdf',
+    background: '#D0DBDF',
     onBackground: '#222',
     primary: '#fff',
     onPrimary: '#222',
-    secondary: '#0D5671',
+    secondary: '#094A62',
     onSecondary: '#efefef',
-    barStyle: 'dark-content',
   },
   dark: {
-    background: '#efefef',
-    onBackground: '#222',
-    primary: '#efefef',
-    onPrimary: '#222',
-    secondary: '#0D5671',
-    onSecondary: '#efefef',
-    barStyle: 'light-content',
+    background: '#222',
+    onBackground: '#fff',
+    primary: '#333',
+    onPrimary: '#fff',
+    secondary: '#47BAE4',
+    onSecondary: '#111',
   },
 };
 
