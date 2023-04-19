@@ -28,7 +28,7 @@ const AppointmentItem = ({
         onPress={() => setVisible(true)}>
         <View style={styles[colorScheme].mainColumn}>
           <View style={styles[colorScheme].titleAndDescription}>
-            <InfoLabel label="Médico:" value={physician} />
+            <InfoLabel label="Médico(a):" value={physician} />
             <InfoLabel label="Hora:" value={hour} />
           </View>
           <InfoLabel label="Data:" value={date} />
@@ -47,7 +47,7 @@ const AppointmentItem = ({
         onBackdropPress={() => setVisible(false)}
         headerStyle={styles[colorScheme].dialogHeader}
         contentStyle={styles[colorScheme].dialogContainer}>
-        <InfoLabel label="Médico:" value={physician} shouldExpand />
+        <InfoLabel label="Médico(a):" value={physician} shouldExpand />
         <InfoLabel label="Especialidade:" value={specialty} shouldExpand />
         <InfoLabel label="Hora:" value={hour} shouldExpand />
         <InfoLabel label="Data:" value={date} shouldExpand />

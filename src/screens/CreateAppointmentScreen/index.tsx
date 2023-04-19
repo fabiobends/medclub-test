@@ -87,7 +87,7 @@ export default function CreateAppointmentScreen() {
         currentValue={currentPhysician}
         setCurrentValue={setCurrentPhysician}
         items={getPickerValues(availablePhysicians)}
-        title="Médico"
+        title="Médico(a)"
       />
       <Picker
         currentValue={currentLocation}
